@@ -1,4 +1,10 @@
-package weather
+package weather_way
+
+import (
+	"encoding/json"
+	"fmt"
+	"net/http"
+)
 
 type RealtimeData struct {
 	Status        string     `json:"status"`
@@ -72,4 +78,26 @@ type UltravioletData struct {
 type ComfortData struct {
 	Index int    `json:"index"`
 	Desc  string `json:"desc"`
+}
+
+// GetWeatherInfo 获取实时天气信息
+func GetRealtimeWeatherInfo(longitude, latitude float64) (RealtimeData, error) {
+	// 根据提供的经度和纬度构建 API 请求 URL
+	url := fmt.Sprintf("https://api.caiyunapp.com/v2.6/r4vS4ukc44vWETiL/%v,%v/realtime", longitude, latitude) //经度，纬度
+
+	// 发送 HTTP GET 请求获取天气信息
+	resp, err := http.Get(url)
+	if err != nil {
+		return RealtimeData{}, err
+	}
+	defer resp.Body.Close()
+
+	// 解码 JSON 响应体并将天气信息存储到 RealtimeData 结构体中
+	var info RealtimeData
+	err = json.NewDecoder(resp.Body).Decode(&info) //创建一个 JSON 解码器
+	if err != nil {
+		return RealtimeData{}, err
+	}
+	return info, nil
+
 }

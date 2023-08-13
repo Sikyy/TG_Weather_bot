@@ -1,4 +1,4 @@
-package weather
+package weather_json
 
 type DailyData struct {
 	Status              string              `json:"status"`

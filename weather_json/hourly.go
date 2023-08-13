@@ -1,4 +1,4 @@
-package weather
+package weather_json
 
 type HourlyData struct {
 	Status               string                `json:"status"`

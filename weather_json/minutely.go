@@ -1,4 +1,4 @@
-package weather
+package weather_json
 
 type MinutelyData struct {
 	Status          string    `json:"status"`

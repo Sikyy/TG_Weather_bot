@@ -1,4 +1,4 @@
-package weather
+package weather_json
 
 // AlertData 预警信息
 type AlertData struct {
