@@ -4,4 +4,7 @@ use (
 	.
 	./weather_json
 	./weather_way
+	./user
+	./handlers
+	./webhook
 )
