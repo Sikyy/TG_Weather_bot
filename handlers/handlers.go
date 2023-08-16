@@ -50,7 +50,42 @@ func HandleTextMessage(bot *tgbotapi.BotAPI, update tgbotapi.Update) {
 			user.SendMessage(bot, update.Message.Chat.ID, "获取实况天气失败")
 			return
 		}
-		weatherString := user.FormatWeatherInfoToString(realtimeinfo)
+		weatherString := user.FormatStructToString(realtimeinfo)
+		user.SendMessage(bot, update.Message.Chat.ID, weatherString)
+	case "/minutelyweather":
+		minutelyinfo, err := weather_way.GetMinutelyWeatherInfo(location.Longitude, location.Latitude)
+		if err != nil {
+			user.SendMessage(bot, update.Message.Chat.ID, "获取分钟级降水失败")
+			return
+		}
+		weatherString := user.FormatStructToString(minutelyinfo)
+		user.SendMessage(bot, update.Message.Chat.ID, weatherString)
+
+	case "/hourlyweather":
+		hourlyinfo, err := weather_way.GetHourlyWeatherInfo(location.Longitude, location.Latitude)
+		if err != nil {
+			user.SendMessage(bot, update.Message.Chat.ID, "获取逐小时天气失败")
+			return
+		}
+		weatherString := user.FormatStructToString(hourlyinfo)
+		user.SendMessage(bot, update.Message.Chat.ID, weatherString)
+
+	case "/dailyweather":
+		dailyinfo, err := weather_way.GetDailyWeatherInfo(location.Longitude, location.Latitude)
+		if err != nil {
+			user.SendMessage(bot, update.Message.Chat.ID, "获取逐日天气失败")
+			return
+		}
+		weatherString := user.FormatStructToString(dailyinfo)
+		user.SendMessage(bot, update.Message.Chat.ID, weatherString)
+
+	case "/alert":
+		alertinfo, err := weather_way.GetAlertWeatherInfo(location.Longitude, location.Latitude)
+		if err != nil {
+			user.SendMessage(bot, update.Message.Chat.ID, "获取预警信息失败")
+			return
+		}
+		weatherString := user.FormatStructToString(alertinfo)
 		user.SendMessage(bot, update.Message.Chat.ID, weatherString)
 
 	case "/adressupdate":

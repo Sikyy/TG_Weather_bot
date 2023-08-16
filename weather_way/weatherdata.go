@@ -1,8 +1,4 @@
-package weather_json
-
-import (
-	"weather-bot/weather_way"
-)
+package weather_way
 
 type WeatherInfo struct {
 	Status     string     `json:"status"`
@@ -19,11 +15,11 @@ type WeatherInfo struct {
 
 // ResultData 天气信息
 type ResultData struct {
-	Alert            AlertData                `json:"alert"`
-	Realtime         weather_way.RealtimeData `json:"realtime"`
-	Minutely         MinutelyData             `json:"minutely"`
-	Hourly           HourlyData               `json:"hourly"`
-	Daily            DailyData                `json:"daily"`
-	Primary          int                      `json:"primary"`
-	ForecastKeyPoint string                   `json:"forecast_keypoint"`
+	Alert            AlertData    `json:"alert"`
+	Realtime         RealtimeData `json:"realtime"`
+	Minutely         MinutelyData `json:"minutely"`
+	Hourly           HourlyData   `json:"hourly"`
+	Daily            DailyData    `json:"daily"`
+	Primary          int          `json:"primary"`
+	ForecastKeyPoint string       `json:"forecast_keypoint"`
 }

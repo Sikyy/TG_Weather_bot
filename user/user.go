@@ -1,7 +1,8 @@
 package user
 
 import (
-	"weather-bot/weather_way"
+	"fmt"
+	"reflect"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
@@ -15,11 +16,22 @@ func SendLocationRequest(bot *tgbotapi.BotAPI, chatID int64) {
 	bot.Send(msg)
 }
 
-// 将实时天气信息格式化为字符串
-func FormatWeatherInfoToString(info weather_way.RealtimeData) string {
-	// 根据需要，将 RealtimeData 中的字段信息格式化为字符串
-	// 例如：return fmt.Sprintf("实时天气：温度 %.1f°C，湿度 %.1f%%", info.Temperature, info.Humidity)
-	return "TODO"
+// 将天气信息格式化为字符串
+func FormatStructToString(data interface{}) string {
+	result := ""
+	v := reflect.ValueOf(data)
+
+	if v.Kind() == reflect.Struct {
+		t := v.Type()
+		for i := 0; i < t.NumField(); i++ {
+			field := t.Field(i)
+			fieldValue := v.Field(i).Interface()
+
+			result += fmt.Sprintf("%s: %v\n", field.Name, fieldValue)
+		}
+	}
+
+	return result
 }
 
 // bot发消息给用户

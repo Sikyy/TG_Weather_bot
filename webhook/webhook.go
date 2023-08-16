@@ -8,8 +8,8 @@ import (
 )
 
 func SetupWebhook(bot *tgbotapi.BotAPI) {
-	// 设置 Webhook
-	_, err := bot.SetWebhook(tgbotapi.NewWebhookWithCert("https://weather.siky.me", "cert.pem"))
+	//设置 Webhook
+	_, err := bot.SetWebhook(tgbotapi.NewWebhookWithCert("weather.siky.me", "fullchain.pem"))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -27,7 +27,7 @@ func SetupWebhook(bot *tgbotapi.BotAPI) {
 	}
 
 	// 启动 HTTPS 服务器
-	go http.ListenAndServeTLS("0.0.0.0:8443", "cert.pem", "privkey.pem", nil)
+	go http.ListenAndServeTLS("127.0.0.1:8443", "fullchain.pem", "privkey.pem", nil)
 }
 
 func ShowWebhookInfo(bot *tgbotapi.BotAPI) {

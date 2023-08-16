@@ -1,4 +1,10 @@
-package weather_json
+package weather_way
+
+import (
+	"encoding/json"
+	"fmt"
+	"net/http"
+)
 
 type DailyData struct {
 	Status              string              `json:"status"`
@@ -132,4 +138,25 @@ type LifeIndexData_1 struct {
 	Date  string `json:"date"`
 	Index string `json:"index"`
 	Desc  string `json:"desc"`
+}
+
+func GetDailyWeatherInfo(longitude, latitude float64) (DailyData, error) {
+	// 根据提供的经度和纬度构建 API 请求 URL
+	url := fmt.Sprintf("https://api.caiyunapp.com/v2.6/r4vS4ukc44vWETiL/%v,%v/realtime", longitude, latitude) //经度，纬度
+
+	// 发送 HTTP GET 请求获取天气信息
+	resp, err := http.Get(url)
+	if err != nil {
+		return DailyData{}, err
+	}
+	defer resp.Body.Close()
+
+	// 解码 JSON 响应体并将天气信息存储到 v 结构体中
+	var info DailyData
+	err = json.NewDecoder(resp.Body).Decode(&info) //创建一个 JSON 解码器
+	if err != nil {
+		return DailyData{}, err
+	}
+	return info, nil
+
 }

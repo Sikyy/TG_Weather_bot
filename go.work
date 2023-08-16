@@ -2,7 +2,6 @@ go 1.20
 
 use (
 	.
-	./weather_json
 	./weather_way
 	./user
 	./handlers
