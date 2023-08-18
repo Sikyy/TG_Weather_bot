@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"reflect"
 
-	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
 // 在 HandleUpdate 外部定义发送位置请求函数

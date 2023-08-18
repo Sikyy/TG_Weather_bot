@@ -6,7 +6,7 @@ import (
 	"weather-bot/user"
 	"weather-bot/weather_way"
 
-	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
 //更新处理函数
