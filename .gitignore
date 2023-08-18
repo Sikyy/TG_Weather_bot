@@ -1,2 +1,3 @@
 privkey.pem
-cert.pem
+fullchain.pem
+

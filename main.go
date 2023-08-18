@@ -2,9 +2,7 @@ package main
 
 import (
 	"log"
-
-	"weather-bot/handlers"
-	"weather-bot/webhook"
+	"net/http"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 )
@@ -18,13 +16,29 @@ func main() {
 
 	bot.Debug = true
 
-	// 设置 Webhook 和 HTTP 服务器
-	webhook.SetupWebhook(bot)
-	webhook.ShowWebhookInfo(bot)
+	log.Printf("Authorized on account %s", bot.Self.UserName)
 
-	updates := bot.ListenForWebhook("/")
+	whConfig := tgbotapi.NewWebhookWithCert("https://weather.siky.me:8443/"+bot.Token, "fullchain.pem")
+
+	_, err = bot.SetWebhook(whConfig)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	info, err := bot.GetWebhookInfo()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if info.LastErrorDate != 0 {
+		log.Printf("Telegram callback failed: %s", info.LastErrorMessage)
+	}
+
+	updates := bot.ListenForWebhook("/" + bot.Token)
+	go http.ListenAndServeTLS("0.0.0.0:8443", "fullchain.pem", "privkey.pem", nil)
+
 	for update := range updates {
-		handlers.HandleUpdate(bot, update)
+		log.Printf("%+v\n", update)
 	}
 
 }
