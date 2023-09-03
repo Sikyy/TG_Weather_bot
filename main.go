@@ -18,7 +18,6 @@ func main() {
 	}
 
 	botToken := viper.GetString("bot_token")
-	webhookURL := viper.GetString("webhook_url")
 	certFilePath := viper.GetString("cert_file_path")
 	keyFilePath := viper.GetString("key_file_path")
 
@@ -41,14 +40,7 @@ func main() {
 
 	log.Printf("Authorized on account %s", bot.Self.UserName)
 
-	//设置webhook
-	webhook, _ := tgbotapi.NewWebhookWithCert(webhookURL, tgbotapi.FilePath(certFilePath))
-
-	_, err = bot.Request(webhook)
-	if err != nil {
-		logger.Error("Error setting up webhook", zap.Error(err))
-	}
-
+	//拿到webhook信息
 	info, err := bot.GetWebhookInfo()
 	if err != nil {
 		logger.Error("Error setting up webhook", zap.Error(err))
@@ -58,7 +50,7 @@ func main() {
 		log.Printf("Telegram callback failed: %s", info.LastErrorMessage)
 	}
 
-	updates := bot.ListenForWebhook("/webhook" + bot.Token)
+	updates := bot.ListenForWebhook("/" + bot.Token)
 	go http.ListenAndServeTLS("0.0.0.0:8443", certFilePath, keyFilePath, nil)
 
 	for update := range updates {
