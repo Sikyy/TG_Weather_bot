@@ -42,7 +42,7 @@ func main() {
 	log.Printf("Authorized on account %s", bot.Self.UserName)
 
 	//设置webhook
-	webhook, _ := tgbotapi.NewWebhookWithCert(webhookURL+bot.Token, tgbotapi.FilePath(certFilePath))
+	webhook, _ := tgbotapi.NewWebhookWithCert(webhookURL, tgbotapi.FilePath(certFilePath))
 
 	_, err = bot.Request(webhook)
 	if err != nil {
