@@ -1,3 +1,2 @@
-bot_token: "6674995287:AAGK820XcZiKkzYEBK_jRaFMk0eImWX97-c"
-cert_file_path: "/etc/letsencrypt/live/weather.siky.me/fullchain.pem"
-key_file_path: "/etc/letsencrypt/live/weather.siky.me/privkey.pem"
+cert_file: "/etc/letsencrypt/live/weather.siky.me/cert.pem"
+key_file: "/etc/letsencrypt/live/weather.siky.me/privkey.pem"

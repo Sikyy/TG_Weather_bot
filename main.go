@@ -6,7 +6,6 @@ import (
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/spf13/viper"
-	"go.uber.org/zap"
 )
 
 func main() {
@@ -17,33 +16,28 @@ func main() {
 		log.Fatalf("Failed to read config file: %v", err)
 	}
 
-	botToken := viper.GetString("bot_token")
-	certFilePath := viper.GetString("cert_file_path")
-	keyFilePath := viper.GetString("key_file_path")
+	certFile := viper.GetString("cert_file")
+	keyFile := viper.GetString("key_file")
 
-	//设置日志
-	logger, err := zap.NewProduction()
+	bot, err := tgbotapi.NewBotAPI("6674995287:AAGK820XcZiKkzYEBK_jRaFMk0eImWX97-c")
 	if err != nil {
-		log.Fatalf("Failed to initialize logger: %v", err)
-	}
-	defer logger.Sync() // 释放资源
-
-	//初始化bot
-	bot, err := tgbotapi.NewBotAPI(botToken)
-	if err != nil {
-		logger.Error("Error initializing bot", zap.Error(err))
-		return
+		log.Fatal(err)
 	}
 
-	//开启调试
 	bot.Debug = true
 
 	log.Printf("Authorized on account %s", bot.Self.UserName)
 
-	//拿到webhook信息
+	wh, _ := tgbotapi.NewWebhookWithCert("https://weather.siky.me:8443/"+bot.Token, tgbotapi.FilePath(certFile))
+
+	_, err = bot.Request(wh)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	info, err := bot.GetWebhookInfo()
 	if err != nil {
-		logger.Error("Error setting up webhook", zap.Error(err))
+		log.Fatal(err)
 	}
 
 	if info.LastErrorDate != 0 {
@@ -51,7 +45,7 @@ func main() {
 	}
 
 	updates := bot.ListenForWebhook("/" + bot.Token)
-	go http.ListenAndServeTLS("0.0.0.0:8443", certFilePath, keyFilePath, nil)
+	go http.ListenAndServeTLS("0.0.0.0:8443", certFile, keyFile, nil)
 
 	for update := range updates {
 		log.Printf("%+v\n", update)
