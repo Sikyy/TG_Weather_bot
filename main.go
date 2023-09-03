@@ -32,12 +32,12 @@ func main() {
 
 	_, err = bot.Request(wh)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Telegram callback failed: %s", err)
 	}
 
 	info, err := bot.GetWebhookInfo()
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Telegram callback failed: %s", err)
 	}
 
 	if info.LastErrorDate != 0 {
@@ -46,6 +46,9 @@ func main() {
 
 	updates := bot.ListenForWebhook("/" + bot.Token)
 	go http.ListenAndServeTLS("0.0.0.0:8443", certFile, keyFile, nil)
+	if err != nil {
+		log.Printf("Telegram callback failed: %s", err)
+	}
 
 	for update := range updates {
 		log.Printf("%+v\n", update)
